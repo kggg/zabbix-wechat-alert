@@ -88,7 +88,7 @@ class Logger(object):
             msglog = nowtime + "  " + "msg ok\n"
             self.writetofile(msglog)
         else:
-            msglog = nowtime + "  "+ res['errmsg']
+            msglog = nowtime + "  "+ res['errmsg']+"\n"
             self.writetofile(msglog)
 
     def writetofile(self, string=None):
@@ -102,16 +102,14 @@ if __name__ == '__main__':
     msg =  str(sys.argv[3])
     log = Logger()
     log.baselog("Start to sendmsg\n")
-    token = ""
     t = AccessToken()
 
     valid = t.varifyexpire()
     if valid == False :
-        token = t.gettoken()
-        t.storetoken(token)
-        log.baselog("got token from weixin backends\n")
-    else:
-        token = t.readtoken()
+        text = t.gettoken()
+        t.storetoken(text)
+        log.baselog("got token from weixin backends\n") 
+    token = t.readtoken()
     s = WechatMsg(token, user, title, msg)
     res = s.sendmsg()
     log.msglog(res)
